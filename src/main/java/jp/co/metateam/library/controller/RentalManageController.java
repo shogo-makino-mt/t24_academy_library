@@ -18,6 +18,9 @@ import jakarta.validation.Valid;
 import jp.co.metateam.library.values.RentalStatus;
 import jp.co.metateam.library.service.BookMstService;
 import jp.co.metateam.library.model.BookMst;
+import jp.co.metateam.library.model.Account;
+import jp.co.metateam.library.model.Stock;
+
 /**
  * 貸出管理関連クラスß
  */
@@ -58,10 +61,14 @@ public class RentalManageController {
     }
 
     @GetMapping("/rental/add")
-    public String add(Model model,@ModelAttribute RentalManageDto rentalManageDto) {
-        List<BookMst> bookMstList = this.bookMstService.findAll();
-        model.addAttribute("bookMstList", bookMstList);
-        model.addAttribute("RentalStatus", RentalStatus.values());
+    public String add(Model model, @ModelAttribute RentalManageDto rentalManageDto) {
+        List<RentalManage> rentalManageList = this.rentalManageService.findAll();
+        List<Account> accounts = this.accountService.findAll();
+        List <Stock> stockList = this.stockService.findAll();
+        
+        model.addAttribute("accounts",accounts);
+        model.addAttribute("stockList", stockList);
+        model.addAttribute("rentalStatus", RentalStatus.values());
 
         if (!model.containsAttribute("RentalManageDto")) {
            model.addAttribute("RentalManageDto", new RentalManageDto());
