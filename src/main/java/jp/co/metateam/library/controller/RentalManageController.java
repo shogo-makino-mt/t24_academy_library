@@ -181,6 +181,8 @@ public class RentalManageController {
             //貸出可否チェック（repositoryでDBにSQLを送り、その情報でチェック）
             Long rentalId = rentalManage.getId();
             String stockId = rentalManageDto.getStockId();
+            Integer status = rentalManageDto.getStatus();
+            if (status == 0 || status == 1) {
            Long rentalSum = this.rentalManageService.countByStatusAndNotId(rentalId,stockId);
             
 
@@ -194,7 +196,7 @@ public class RentalManageController {
                 result.addError(new FieldError("retanlmanageDto", "expectedRentalOn",rentalerror));
                 result.addError(new FieldError("retanlmanageDto", "expectedReturnOn",rentalerror));
             }
-          }
+            } }
         
            
         
