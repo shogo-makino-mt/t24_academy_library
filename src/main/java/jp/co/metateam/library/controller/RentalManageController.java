@@ -90,7 +90,8 @@ public class RentalManageController {
             String adderror;
             String stockId = rentalManageDto.getStockId();
             Long addsum = this.rentalManageService.countByStockIdAndStatusIn(stockId);
-
+            Integer status = rentalManageDto.getStatus();
+            if (status == 0 || status == 1) {
             if (!(addsum == 0)) {
                 Date expectedRentalOn = rentalManageDto.getExpectedRentalOn();
                 Date expectedReturnOn = rentalManageDto.getExpectedReturnOn();
@@ -101,6 +102,7 @@ public class RentalManageController {
                     result.addError(new FieldError("rentalManageDto","expectedReturnOn", adderror));
                 }
             }
+        }
 
             if (result.hasErrors()) {
                 throw new Exception("Validation error.");
