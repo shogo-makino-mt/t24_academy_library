@@ -69,7 +69,7 @@ public class RentalManageController {
     public String add(Model model, @ModelAttribute RentalManageDto rentalManageDto) {
         
         List<Account> accounts = this.accountService.findAll();
-        List <Stock> stockList = this.stockService.findAll();
+        List <Stock> stockList = this.stockService.findStockAvailableAll();
         
         model.addAttribute("accounts",accounts);
         model.addAttribute("stockList", stockList);
@@ -172,7 +172,7 @@ public class RentalManageController {
         try {
             RentalManage rentalManage = this.rentalManageService.findById(Long.valueOf(id));
             String rentalerror;
-            //貸出ステータスチェック（編集前の貸出ステータスと編集後の貸出ステータスを呼び出しrentalmanageDtoでチェック）
+            //貸出ステータスチェック
             Optional<String> validErrorOptional = rentalManageDto.isStatusError(rentalManage.getStatus());
             // Optionalが空でない場合のみエラーを処理する
              validErrorOptional.ifPresent(validError -> {
@@ -181,7 +181,7 @@ public class RentalManageController {
                     
                 }
                 });
-            //貸出可否チェック（repositoryでDBにSQLを送り、その情報でチェック）
+            //貸出可否チェック
             Long rentalId = rentalManage.getId();
             String stockId = rentalManageDto.getStockId();
             Integer status = rentalManageDto.getStatus();

@@ -1,4 +1,5 @@
 package jp.co.metateam.library.service;
+
 import java.util.Date;
 import java.sql.Timestamp;
 import java.util.List;
@@ -24,20 +25,19 @@ public class RentalManageService {
     private final RentalManageRepository rentalManageRepository;
     private final StockRepository stockRepository;
 
-     @Autowired
+    @Autowired
     public RentalManageService(
-        AccountRepository accountRepository,
-        RentalManageRepository rentalManageRepository,
-        StockRepository stockRepository
-    ) {
+            AccountRepository accountRepository,
+            RentalManageRepository rentalManageRepository,
+            StockRepository stockRepository) {
         this.accountRepository = accountRepository;
         this.rentalManageRepository = rentalManageRepository;
         this.stockRepository = stockRepository;
     }
 
     @Transactional
-    public List <RentalManage> findAll() {
-        List <RentalManage> rentalManageList = this.rentalManageRepository.findAll();
+    public List<RentalManage> findAll() {
+        List<RentalManage> rentalManageList = this.rentalManageRepository.findAll();
 
         return rentalManageList;
     }
@@ -53,22 +53,25 @@ public class RentalManageService {
     }
 
     @Transactional
-    public Long countByStatusAndExpectedReturnBefore(String stockId,Date expectedRentalOn, Date expectedReturnlOn) {
-        return this.rentalManageRepository. countByStatusAndExpectedReturnBefore(stockId,
-                                                                                expectedRentalOn,
-                                                                                expectedReturnlOn);
-    }                                                                        
-    //WHERE分に使われているカラム（stockID,expecetdrentalon etc)
+    public Long countByStatusAndExpectedReturnBefore(String stockId, Date expectedRentalOn, Date expectedReturnlOn) {
+        return this.rentalManageRepository.countByStatusAndExpectedReturnBefore(stockId,
+                expectedRentalOn,
+                expectedReturnlOn);
+    }
+
+    
     @Transactional
     public Long countByStatusAndNotId(Long rantalId, String stockId) {
         return this.rentalManageRepository.countByStatusAndNotId(rantalId, stockId);
     }
+
     @Transactional
-    public Long countRecords(  Long rentalId, String StockId,Date expectedRentalOn, Date expectedReturnOn) {
-        return rentalManageRepository.countByStatusAndExpectedReturnBeforeAndNotId(rentalId, StockId, expectedRentalOn, expectedReturnOn);
+    public Long countRecords(Long rentalId, String StockId, Date expectedRentalOn, Date expectedReturnOn) {
+        return rentalManageRepository.countByStatusAndExpectedReturnBeforeAndNotId(rentalId, StockId, expectedRentalOn,
+                expectedReturnOn);
     }
 
-    @Transactional 
+    @Transactional
     public void save(RentalManageDto rentalManageDto) throws Exception {
         try {
             Account account = this.accountRepository.findByEmployeeId(rentalManageDto.getEmployeeId()).orElse(null);
@@ -99,7 +102,7 @@ public class RentalManageService {
 
     private RentalManage setRentalStatusDate(RentalManage rentalManage, Integer status) {
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        
+
         if (status == RentalStatus.RENTALING.getValue()) {
             rentalManage.setRentaledAt(timestamp);
         } else if (status == RentalStatus.RETURNED.getValue()) {
@@ -110,11 +113,11 @@ public class RentalManageService {
 
         return rentalManage;
     }
+
     @Transactional
     public void update(Long id, RentalManageDto rentalManageDto) throws Exception {
         try {
             // 既存レコード取得
-            
 
             Account account = this.accountRepository.findByEmployeeId(rentalManageDto.getEmployeeId()).orElse(null);
             if (account == null) {
@@ -142,5 +145,5 @@ public class RentalManageService {
         } catch (Exception e) {
             throw e;
         }
-}
+    }
 }
